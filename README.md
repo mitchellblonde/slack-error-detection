@@ -12,7 +12,7 @@ Berichtformaat:
 
 ```bash
 composer require mitchellblonde/slack-error-detection
-```
+
 
 ## Configuratie (.env)
 
