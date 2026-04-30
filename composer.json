@@ -1,5 +1,5 @@
 {
-  "name": "slack-error-detection/slack-error-notifier",
+  "name": "mitchellblonde/slack-error-detection",
   "description": "PHP/Laravel package to send application errors to Slack via Incoming Webhooks.",
   "type": "library",
   "license": "MIT",

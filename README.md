@@ -11,8 +11,8 @@ Berichtformaat:
 ## Installatie
 
 ```bash
-composer require slack-error-detection/slack-error-notifier
-```
+composer require mitchellblonde/slack-error-detection
+
 
 ## Configuratie (.env)
 
