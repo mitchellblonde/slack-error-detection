@@ -19,7 +19,11 @@ final class ErrorReporterTest extends TestCase
         $message = $reporter->formatErrorMessage(new RuntimeException('Boom'), 'app-host');
 
         self::assertStringContainsString('Host: app-host', $message);
+        self::assertStringContainsString('Website:', $message);
+        self::assertStringContainsString('User:', $message);
         self::assertStringContainsString('Date:', $message);
+        self::assertStringContainsString('File:', $message);
+        self::assertStringContainsString('Line:', $message);
         self::assertStringContainsString('Error: Boom', $message);
     }
 }

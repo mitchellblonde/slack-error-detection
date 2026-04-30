@@ -1,35 +1,42 @@
 # Slack Error Notifier
 
-Een Composer package voor **PHP en Laravel** dat errors naar een Slack-kanaal stuurt via een Incoming Webhook.
+A Composer package for **PHP and Laravel** that sends application errors to a Slack channel through an Incoming Webhook.
 
-Berichtformaat:
+## Message format
+
+Each Slack message includes:
 
 - Host
+- Website
+- User (if authenticated)
 - Date
+- File
+- Line
 - Error
 
-## Installatie
+## Installation
 
 ```bash
 composer require mitchellblonde/slack-error-detection
+```
 
+## Environment configuration
 
-## Configuratie (.env)
-
-Voeg dit toe aan je `.env`:
+Add these values to your `.env` file:
 
 ```env
 SLACK_ERROR_WEBHOOK_URL=https://hooks.slack.com/services/XXX/YYY/ZZZ
 SLACK_ERROR_TIMEOUT_SECONDS=2.5
+APP_URL=https://example.com
 ```
 
-> Gebruik je echte webhook alleen in `.env` (niet hardcoden in code).
+> Store your real webhook token only in `.env` and never hardcode it.
 
-## Laravel gebruik
+## Laravel usage
 
-De ServiceProvider wordt automatisch ontdekt via package discovery.
+The package uses Laravel auto-discovery for its ServiceProvider.
 
-### Stap 1: trait toevoegen aan `app/Exceptions/Handler.php`
+### Step 1: use the trait in `app/Exceptions/Handler.php`
 
 ```php
 <?php
@@ -45,9 +52,15 @@ class Handler extends ExceptionHandler
 }
 ```
 
-Vanaf dat moment wordt elke gerapporteerde exception ook naar Slack gestuurd.
+From that point on, every reported exception is also sent to Slack.
 
-## Plain PHP gebruik
+### User resolution behavior
+
+- In Laravel, the package tries `auth()->user()` first.
+- In plain PHP, it tries `$_SESSION['user']`.
+- If no user is available, it sends `User: guest`.
+
+## Plain PHP usage
 
 ```php
 <?php
@@ -65,17 +78,15 @@ try {
 }
 ```
 
-## Voorbeeld Slack payload (zelfde manier als curl)
-
-De package verstuurt JSON in exact dezelfde stijl als:
+## Example Slack payload (same style as curl)
 
 ```bash
 curl -X POST -H 'Content-type: application/json' \
---data '{"text":"Host: my-server\nDate: 2026-04-30T12:00:00+00:00\nError: Something went wrong"}' \
+--data '{"text":"Host: my-server\nWebsite: https://example.com\nUser: 123\nDate: 2026-04-30T12:00:00+00:00\nFile: /var/www/app/Service.php\nLine: 42\nError: Something went wrong"}' \
 https://hooks.slack.com/services/XXX/YYY/ZZZ
 ```
 
-## Veiligheid
+## Security notes
 
-- Zet webhook URL altijd in `.env`.
-- Commit nooit echte Slack webhook tokens naar git.
+- Keep the webhook URL in `.env`.
+- Never commit real Slack webhook tokens.
